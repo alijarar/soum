@@ -1,0 +1,1 @@
+export { SelectedVariants } from './selected-variants';

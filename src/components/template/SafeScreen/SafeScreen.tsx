@@ -1,4 +1,4 @@
-import { SafeAreaView, StatusBar } from 'react-native';
+import { SafeAreaView } from 'react-native';
 
 import { useTheme } from '@/theme';
 
@@ -14,10 +14,6 @@ function SafeScreen({ children }: PropsWithChildren) {
 				{ backgroundColor: navigationTheme.colors.background },
 			]}
 		>
-			<StatusBar
-				barStyle={variant === 'dark' ? 'light-content' : 'dark-content'}
-				backgroundColor={navigationTheme.colors.background}
-			/>
 			{children}
 		</SafeAreaView>
 	);
