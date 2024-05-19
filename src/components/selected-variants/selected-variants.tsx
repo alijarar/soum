@@ -8,10 +8,7 @@ interface SelectedVariantsProps {
 export const SelectedVariants: React.FC<SelectedVariantsProps> = ({ selectedItems }) => {
   const selectedModels: { [key: string]: Set<string> } = {};
 
-  // console.log("selectedItems",selectedItems)
-
   Object.entries(selectedItems).forEach(([key, item]) => {
-    console.log("item", item);
     const variantName = item.name.split(" ").slice(-2).join(" ");
 
     if (item.type === 'model' || item.type === 'brand' || item.type === "category") {
@@ -28,22 +25,24 @@ export const SelectedVariants: React.FC<SelectedVariantsProps> = ({ selectedItem
   });
 
   return (
-    <View>
+    <View style={styles.container}>
       {Object.entries(selectedModels).map(([model, variants]) => (
         <View key={model} style={styles.tagContainer}>
-          <Text style={styles.selectedHeader}>{model}</Text>
           <View style={styles.variantContainer}>
-            {variants.has('all') ? (
-              <Text style={styles.selectedText}>All variants</Text>
+            {variants.has("all") ? (
+              <Text style={styles.tag}>{`All ${model} devices`}</Text>
             ) : (
-              Array.from(variants).map((variant, index, arr) => (
-                <View key={index} style={styles.tag}>
-                  <Text style={styles.selectedText}>
-                    {variant}
-                    {index !== arr.length - 1 && ','}
-                  </Text>
+              <View style={styles.tag}>
+                <View style={styles.variantContainer}>
+                  <Text>{`${model} `}</Text>
+                  {Array.from(variants).map((variant, index, arr) => (
+                    <Text key={index}>
+                      {variant}
+                      { ", "}
+                    </Text>
+                  ))}
                 </View>
-              ))
+              </View>
             )}
           </View>
         </View>
@@ -53,29 +52,26 @@ export const SelectedVariants: React.FC<SelectedVariantsProps> = ({ selectedItem
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
   tagContainer: {
-    marginBottom: 10,
+    marginBottom: 2,
   },
   variantContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    alignItems: 'center',
   },
   tag: {
     backgroundColor: '#e0e0e0',
-    borderRadius: 20,
     paddingVertical: 5,
     paddingHorizontal: 10,
     marginVertical: 5,
     marginRight: 5,
-  },
-  selectedHeader: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  selectedText: {
-    fontSize: 16,
+    borderRadius: 4,
   },
 });
 
 export default SelectedVariants;
-

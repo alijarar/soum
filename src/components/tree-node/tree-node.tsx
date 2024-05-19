@@ -19,7 +19,7 @@ export const TreeNode: React.FC<TreeNodeProps> = ({ item, level, styles, onSelec
   return (
     <View style={{ marginLeft: level * 20 }}>
       <View style={styles.nodeContainer}>
-        <CheckBox value={isChecked} onValueChange={handleSelect} />
+        <CheckBox value={isChecked} onValueChange={handleSelect} boxType={'square'} />
         <TouchableOpacity onPress={handlePress}>
           <Text style={[styles.nodeText, styles.customNodeText]}>{item.name}</Text>
         </TouchableOpacity>

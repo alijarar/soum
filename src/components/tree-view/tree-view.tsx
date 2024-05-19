@@ -124,7 +124,6 @@ export const TreeView: React.FC<TreeViewProps> = () => {
   };
 
   const treeData = transformData(products);
-  // console.log("treeData",JSON.stringify(treeData))
 
   return (
     <View style={styles.container}>
@@ -175,6 +174,8 @@ const styles = StyleSheet.create({
   nodeContainer: {
     flexDirection: "row",
     alignItems: "center",
+    marginBottom: 5
+    
   },
   nodeText: {
     fontSize: 16,
