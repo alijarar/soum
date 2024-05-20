@@ -34,7 +34,7 @@ export const TreeNode: React.FC<TreeNodeProps> = ({ item, level, styles, onSelec
           <Text style={[styles.nodeText, styles.customNodeText]}>{item.name}</Text>
         </TouchableOpacity>
       </View>
-      {/* {expanded && item.children && ( */}
+      {expanded && item.children && (
         <FlatList
           data={item.children}
           renderItem={({ item }) => (
@@ -49,7 +49,7 @@ export const TreeNode: React.FC<TreeNodeProps> = ({ item, level, styles, onSelec
           )}
           keyExtractor={(item, index) => index.toString()}
         />
-      {/* )} */}
+      )}
     </View>
   );
 };
