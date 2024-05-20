@@ -1,11 +1,5 @@
-import { useEffect, useState } from 'react';
 import {
-	View,
-	ActivityIndicator,
-	Text,
-	TouchableOpacity,
 	ScrollView,
-	Alert,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { SafeScreen } from '@/components/template';
@@ -17,8 +11,8 @@ function Home() {
 
 	return (
 		<SafeScreen>
-			<ScrollView>
-				<TreeView />
+			<ScrollView testID="scroll-view">
+				<TreeView testID="tree-view" />
 			</ScrollView>
 		</SafeScreen>
 	);

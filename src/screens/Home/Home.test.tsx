@@ -1,28 +1,20 @@
-import { fireEvent, render, screen } from '@testing-library/react-native';
-import { MMKV } from 'react-native-mmkv';
-import { I18nextProvider } from 'react-i18next';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-
-import { ThemeProvider } from '@/theme';
-import i18n from '@/translations';
-
+import React from 'react';
+import { render } from '@testing-library/react-native';  // Adjust the path accordingly
+import { SafeScreen } from '@/components/template';
+import { TreeView } from '@/components/tree-view';
 import Home from './Home';
 
-describe('Home screen should render correctly', () => {
-	let storage: MMKV;
-	const queryClient = new QueryClient({
-		defaultOptions: {
-			queries: {
-				retry: false,
-				gcTime: Infinity,
-			},
-			mutations: {
-				gcTime: Infinity,
-			},
-		},
-	});
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: jest.fn((key) => key),
+  }),
+}));
 
-	beforeAll(() => {
-		storage = new MMKV();
-	});
+describe('Home Component', () => {
+  it('renders correctly', () => {
+    const { getByTestId } = render(<Home />);
+
+    expect(getByTestId('scroll-view')).toBeTruthy();
+    expect(getByTestId('tree-view-container')).toBeTruthy();
+  });
 });

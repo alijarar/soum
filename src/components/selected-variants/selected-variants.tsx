@@ -3,31 +3,36 @@ import { View, Text, StyleSheet } from 'react-native';
 
 interface SelectedVariantsProps {
   selectedItems: { [key: string]: any };
+  testID?: string;
 }
 
-export const SelectedVariants: React.FC<SelectedVariantsProps> = ({ selectedItems }) => {
-  const selectedModels: { [key: string]: Set<string> } = {};
+// SelectedVariants component displays selected models and their variants
+export const SelectedVariants: React.FC<SelectedVariantsProps> = ({ selectedItems, testID }) => {
+  // Object to store selected data
+  const selectedData: { [key: string]: Set<string> } = {};
 
   Object.entries(selectedItems).forEach(([key, item]) => {
     const variantName = item.name.split(" ").slice(-2).join(" ");
 
+    // Check if the item is a model, brand, category, or variant and update the selectedData object accordingly
     if (item.type === 'model' || item.type === 'brand' || item.type === "category") {
-      if (!selectedModels[item.name]) {
-        selectedModels[item.name] = new Set();
+      if (!selectedData[item.name]) {
+        selectedData[item.name] = new Set();
       }
-      selectedModels[item.name] = new Set(['all']);
+      selectedData[item.name] = new Set(['all']);
     } else {
-      if (!selectedModels[item.model]) {
-        selectedModels[item.model] = new Set();
+      if (!selectedData[item.model]) {
+        selectedData[item.model] = new Set();
       }
-      selectedModels[item.model].add(variantName);
+      selectedData[item.model].add(variantName);
     }
   });
 
   return (
-    <View style={styles.container}>
-      {Object.entries(selectedModels).map(([model, variants]) => (
-        <View key={model} style={styles.tagContainer}>
+    <View style={styles.container} testID={testID}>
+      {/* Iterate through selected models and their variants and display them */}
+      {Object.entries(selectedData).map(([model, variants]) => (
+        <View key={model} style={styles.tagContainer} testID={`selected-model-${model}`}>
           <View style={styles.variantContainer}>
             {variants.has("all") ? (
               <Text style={styles.tag}>{`All ${model} devices`}</Text>

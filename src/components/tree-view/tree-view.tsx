@@ -4,6 +4,8 @@ import { Category, TreeNodeData, TreeViewProps } from "@/types/types";
 import { TreeNode } from "../tree-node";
 import { SelectedVariants } from "../selected-variants";
 
+
+// Example data structure for products
 const products: Category[] = [
   {
     name: "Mobile Phones",
@@ -83,12 +85,11 @@ const products: Category[] = [
     ],
   },
 ];
+export const TreeView: React.FC<TreeViewProps> = ({ testID }) => {
+  // State to keep track of selected items
+  const [selectedItems, setSelectedItems] = useState<{ [key: string]: any }>({});
 
-export const TreeView: React.FC<TreeViewProps> = () => {
-  const [selectedItems, setSelectedItems] = useState<{ [key: string]: any }>(
-    {}
-  );
-
+  // Function to transform the original data into a tree structure
   const transformData = (data: Category[]): TreeNodeData[] => {
     return data.map((category) => ({
       name: category.name,
@@ -110,25 +111,43 @@ export const TreeView: React.FC<TreeViewProps> = () => {
       })),
     }));
   };
-
-  const handleSelect = (item: TreeNodeData) => {
-    setSelectedItems((prevSelectedItems) => {
-      const newSelectedItems = { ...prevSelectedItems };
-      if (newSelectedItems[item.name]) {
-        delete newSelectedItems[item.name];
+  
+  // Function to update the selection state
+  const updateSelection = (items:TreeNodeData[], selected:boolean) => {
+    let updatedSelection = { ...selectedItems };
+    
+    // Recursive function to toggle selection for an item and its children
+    const toggleSelection = (item:TreeNodeData, value:boolean) => {
+      if (value) {
+        updatedSelection[item.name] = { ...item, value: true };
       } else {
-        newSelectedItems[item.name] = { ...item, value: true };
+        delete updatedSelection[item.name];
       }
-      return newSelectedItems;
-    });
+
+      if (item.children) {
+        item.children.forEach((child) => toggleSelection(child, value));
+      }
+    };
+
+    items.forEach((item) => toggleSelection(item, selected));
+    return updatedSelection;
   };
 
+  // Handler for when an item is selected
+  const handleSelect = (item: TreeNodeData) => {
+    setSelectedItems((prevSelectedItems) => {
+      const isSelected = !!prevSelectedItems[item.name];
+      return updateSelection([item], !isSelected);
+    });
+  };
+  
+  // Transforming the data into a tree structure
   const treeData = transformData(products);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.selectedHeader}>Browser Products</Text>
-      <View style={styles.listContainer}>
+    <View style={styles.container} testID={testID ? `${testID}-container` : 'tree-view-container'}>
+      <Text style={styles.selectedHeader} testID="browser-products-header">Browser Products</Text>
+      <View style={styles.listContainer} testID="list-container">
         <FlatList
           data={treeData}
           renderItem={({ item }) => (
@@ -138,6 +157,7 @@ export const TreeView: React.FC<TreeViewProps> = () => {
               styles={styles}
               onSelect={handleSelect}
               selectedItems={selectedItems}
+              testID={`tree-node-${item.name}`}
             />
           )}
           keyExtractor={(item, index) => index.toString()}
@@ -146,9 +166,9 @@ export const TreeView: React.FC<TreeViewProps> = () => {
           nestedScrollEnabled={true}
         />
       </View>
-      <View style={styles.selectedContainer}>
-        <Text style={styles.selectedHeader}>Selected Variants</Text>
-        <SelectedVariants selectedItems={selectedItems} />
+      <View style={styles.selectedContainer} testID="selected-variants-container">
+        <Text style={styles.selectedHeader} testID="selected-variants-header">Selected Variants</Text>
+        <SelectedVariants selectedItems={selectedItems} testID="selected-variants" />
       </View>
     </View>
   );
@@ -174,8 +194,7 @@ const styles = StyleSheet.create({
   nodeContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 5
-    
+    marginBottom: 5,
   },
   nodeText: {
     fontSize: 16,
